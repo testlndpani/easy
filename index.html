@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Akses Cepat Merdeka Gold</title>
+<link rel="icon" href="favicon.ico">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&family=Figtree:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: logo di atas, hero putih dengan dua figur K3 di kanan, lalu pencarian, filter jenis link, dan grid kartu. Satu tampilan terang mengikuti warna logo (cokelat tua dan emas). */
+:root {
+  --bg: #f8f6f1;
+  --surface: #ffffff;
+  --fg: #3a2412;
+  --brown: #53341a;
+  --muted: #7d6c5b;
+  --line: #e8e1d3;
+  --gold: #c09c58;
+  --gold-deep: #937220;
+  --gold-soft: #f6eedb;
+  --font-display: "Barlow Semi Condensed", "Arial Narrow", system-ui, sans-serif;
+  --font-body: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "DM Mono", ui-monospace, Menlo, monospace;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--fg); font-family: var(--font-body);
+  font-size: 15px; line-height: 1.5;
+  padding-block: 28px 56px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.wrap { max-width: 1000px; margin: 0 auto; display: flex; flex-direction: column; gap: 24px; }
+.brand img { display: block; height: 46px; width: auto; max-width: 100%; }
+
+.hero {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 16px;
+  display: flex; gap: 8px 24px; align-items: flex-end; justify-content: space-between; flex-wrap: wrap;
+  padding: 28px 28px 0; overflow: hidden; border-bottom: 3px solid var(--gold);
+}
+.hero-text { flex: 1 1 340px; min-width: 0; display: flex; flex-direction: column; gap: 10px; padding-bottom: 28px; }
+.eyebrow { font-family: var(--font-mono); font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--gold-deep); }
+h1 {
+  margin: 0; font-family: var(--font-display); font-weight: 700; text-transform: uppercase;
+  font-size: clamp(32px, 6vw, 46px); line-height: 1.02; letter-spacing: .01em; color: var(--brown); text-wrap: balance;
+}
+.sub { margin: 0; color: var(--muted); max-width: 46ch; }
+.people { flex: 0 1 auto; display: flex; align-items: flex-end; margin-inline: auto; }
+.people img { display: block; height: 210px; width: auto; max-width: 48vw; }
+.people img + img { margin-left: -26px; height: 190px; }
+
+.bar { display: flex; gap: 12px 16px; align-items: center; flex-wrap: wrap; }
+.search { flex: 1 1 260px; min-width: 0; }
+.search input {
+  width: 100%; font: inherit; color: var(--fg); background: var(--surface);
+  border: 1px solid var(--line); border-radius: 10px; padding: 11px 14px;
+}
+.search input::placeholder { color: var(--muted); }
+.count { font-family: var(--font-mono); font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.filters { display: flex; gap: 8px; flex-wrap: wrap; }
+.fbtn {
+  font: inherit; font-size: 13px; font-weight: 600; cursor: pointer; color: var(--brown);
+  background: var(--surface); border: 1px solid var(--line); border-radius: 999px; padding: 6px 14px;
+}
+.fbtn[aria-pressed="true"] { background: var(--brown); border-color: var(--brown); color: #fff; }
+.fbtn span { font-family: var(--font-mono); font-weight: 400; margin-left: 4px; opacity: .75; }
+
+:focus-visible { outline: 2px solid var(--gold-deep); outline-offset: 2px; }
+
+.notice { background: var(--gold-soft); border-radius: 10px; padding: 10px 14px; font-size: 14px; color: var(--brown); }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 14px; }
+.card {
+  display: flex; flex-direction: column; gap: 6px; min-width: 0;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 12px;
+  padding: 16px; color: inherit; text-decoration: none;
+  transition: border-color .15s, transform .15s;
+}
+.card:hover { border-color: var(--gold); transform: translateY(-1px); }
+.top { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 4px; }
+.chip {
+  font-size: 12px; font-weight: 600; border-radius: 999px; padding: 2px 10px;
+  background: var(--gold-soft); color: var(--gold-deep);
+}
+.chip[data-k="Spreadsheet"] { background: #e6f3ec; color: #266a43; }
+.chip[data-k="Dokumen"] { background: #e8f0fb; color: #2a5599; }
+.chip[data-k="Presentasi"] { background: #fbeee0; color: #a2561a; }
+.chip[data-k="Formulir"] { background: #efe9f8; color: #5e3f96; }
+.chip[data-k="Video"] { background: #fbe9e7; color: #a5322a; }
+.num { font-family: var(--font-mono); font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.name { font-weight: 600; font-size: 17px; line-height: 1.3; color: var(--brown); overflow-wrap: anywhere; }
+.host { font-family: var(--font-mono); font-size: 12px; color: var(--gold-deep); overflow-wrap: anywhere; }
+.desc { color: var(--muted); font-size: 14px; overflow-wrap: anywhere; }
+.empty { text-align: center; color: var(--muted); padding: 40px 16px; border: 1px dashed var(--line); border-radius: 12px; }
+
+details { border-top: 1px solid var(--line); padding-top: 18px; }
+summary { cursor: pointer; font-weight: 600; font-size: 14px; color: var(--brown); }
+.panel { display: flex; flex-direction: column; gap: 12px; margin-top: 14px; }
+.panel p { margin: 0; color: var(--muted); font-size: 14px; max-width: 70ch; }
+textarea {
+  width: 100%; min-height: 130px; resize: vertical; font-family: var(--font-mono); font-size: 13px;
+  color: var(--fg); background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 12px;
+}
+.actions { display: flex; gap: 10px; flex-wrap: wrap; }
+.btn {
+  font: inherit; font-weight: 600; font-size: 14px; cursor: pointer; text-decoration: none;
+  border-radius: 9px; padding: 9px 16px; border: 1px solid var(--line); background: var(--surface); color: var(--brown);
+}
+.btn.primary { background: var(--brown); border-color: var(--brown); color: #fff; }
+.msg { font-size: 13px; color: var(--muted); min-height: 1.2em; }
+@media (max-width: 560px) {
+  .hero { padding: 22px 18px 0; }
+  .people img { height: 170px; }
+  .people img + img { height: 155px; }
+}
+@media (prefers-reduced-motion: reduce) { .card { transition: none; } .card:hover { transform: none; } }
+.foot { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; border-top: 1px solid var(--line); padding-top: 18px; }
+.foot span { flex: 1 1 200px; font-size: 13px; color: var(--muted); }
+body { margin: 0; }
+</style>
+</head>
+<body>
+
+
+<div class="wrap">
+  <div class="brand"><img src="assets/logo.png" alt="Merdeka Gold Resources"></div>
+
+  <section class="hero">
+    <div class="hero-text">
+      <span class="eyebrow">Pusat link kerja</span>
+      <h1>Akses Cepat</h1>
+      <p class="sub">Semua spreadsheet, web, dan dokumen yang sering dipakai, satu klik dari sini. Link terbuka di tab baru.</p>
+    </div>
+    <div class="people">
+      <img src="assets/pekerja-1.webp" alt="Pekerja perempuan dengan seragam K3 Merdeka Gold">
+      <img src="assets/pekerja-2.webp" alt="Pekerja dengan perlengkapan keselamatan lengkap">
+    </div>
+  </section>
+
+  <div class="bar">
+    <div class="search"><input id="q" type="search" placeholder="Cari nama atau keterangan" aria-label="Cari link" autocomplete="off"></div>
+    <span class="count" id="count"></span>
+  </div>
+  <div class="filters" id="filters" role="group" aria-label="Filter jenis link"></div>
+
+  <div class="notice" id="notice" hidden></div>
+
+  <main class="grid" id="grid"></main>
+  <div class="empty" id="empty" hidden></div>
+
+  <footer class="foot">
+    <span id="stamp"></span>
+    <button class="btn" id="reload" type="button">Muat ulang</button>
+    <a class="btn" href="https://docs.google.com/spreadsheets/d/1GUNlLHZYIYIMcnXWTexLE_khmJ9tNWiB5l1ue-QqRiA/edit?gid=0" target="_blank" rel="noopener">Buka sheet</a>
+  </footer>
+</div>
+
+
+<script>
+(function () {
+  // Ganti kalau sheet pindah. Sheet harus dibagikan sebagai "Siapa saja yang memiliki link: Pelihat".
+  var SHEET_ID = "1GUNlLHZYIYIMcnXWTexLE_khmJ9tNWiB5l1ue-QqRiA";
+  var GID = "0";
+  var CSV_URL = "https://docs.google.com/spreadsheets/d/" + SHEET_ID + "/gviz/tq?tqx=out:csv&gid=" + GID;
+  var KEY = "akses-cepat-cache";
+  var KINDS = ["Spreadsheet", "Dokumen", "Presentasi", "Formulir", "Drive", "Video", "Web"];
+  var items = [], active = "Semua", state = "loading";
+
+  var $ = function (id) { return document.getElementById(id); };
+  var grid = $("grid"), q = $("q"), count = $("count"), empty = $("empty"),
+      notice = $("notice"), filters = $("filters"), stamp = $("stamp");
+
+  function parseCSV(text) {
+    var rows = [], row = [], cell = "", inQ = false, i, c;
+    for (i = 0; i < text.length; i++) {
+      c = text[i];
+      if (inQ) {
+        if (c === '"') { if (text[i + 1] === '"') { cell += '"'; i++; } else inQ = false; }
+        else cell += c;
+      } else if (c === '"') inQ = true;
+      else if (c === ",") { row.push(cell); cell = ""; }
+      else if (c === "\n" || c === "\r") {
+        if (c === "\r" && text[i + 1] === "\n") i++;
+        row.push(cell); cell = ""; rows.push(row); row = [];
+      } else cell += c;
+    }
+    if (cell !== "" || row.length) { row.push(cell); rows.push(row); }
+    return rows.filter(function (r) { return r.join("").trim() !== ""; });
+  }
+  function toItems(rows) {
+    if (!rows.length) return [];
+    var head = rows[0].map(function (h) { return h.trim().toLowerCase(); });
+    var ix = { no: head.indexOf("no"), nama: head.indexOf("nama"), link: head.indexOf("link"), ket: head.indexOf("keterangan") };
+    if (ix.nama < 0) ix = { no: 0, nama: 1, link: 2, ket: 3 };
+    return rows.slice(1).map(function (c, i) {
+      var g = function (k) { return ix[k] > -1 && c[ix[k]] ? c[ix[k]].trim() : ""; };
+      return { no: g("no") || String(i + 1), nama: g("nama"), link: g("link"), ket: g("ket") };
+    }).filter(function (r) { return r.nama; });
+  }
+
+  function normUrl(u) {
+    u = (u || "").trim();
+    if (!u) return "";
+    if (!/^https?:\/\//i.test(u)) u = "https://" + u;
+    try { var x = new URL(u); return /^https?:$/.test(x.protocol) ? x.href : ""; } catch (e) { return ""; }
+  }
+  function hostOf(u) { try { return new URL(u).hostname.replace(/^www\./, ""); } catch (e) { return ""; } }
+  function kindOf(u) {
+    if (!u) return "Web";
+    var x; try { x = new URL(u); } catch (e) { return "Web"; }
+    var h = x.hostname.toLowerCase(), p = x.pathname.toLowerCase();
+    if (/(^|\.)docs\.google\.com$/.test(h)) {
+      if (p.indexOf("/spreadsheets") === 0) return "Spreadsheet";
+      if (p.indexOf("/document") === 0) return "Dokumen";
+      if (p.indexOf("/presentation") === 0) return "Presentasi";
+      if (p.indexOf("/forms") === 0) return "Formulir";
+    }
+    if (h === "forms.gle" || /(^|\.)forms\.office\.com$/.test(h)) return "Formulir";
+    if (/(^|\.)drive\.google\.com$/.test(h)) return "Drive";
+    if (/youtube\.com$|youtu\.be$/.test(h)) return "Video";
+    if (/\.(xlsx?|csv)$/.test(p)) return "Spreadsheet";
+    if (/\.(docx?|pdf)$/.test(p)) return "Dokumen";
+    if (/\.pptx?$/.test(p)) return "Presentasi";
+    return "Web";
+  }
+  function el(tag, cls, text) {
+    var n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text != null) n.textContent = text;
+    return n;
+  }
+
+  function renderFilters(all) {
+    var counts = {};
+    all.forEach(function (r) { counts[r.kind] = (counts[r.kind] || 0) + 1; });
+    if (active !== "Semua" && !counts[active]) active = "Semua";
+    filters.textContent = "";
+    var names = ["Semua"].concat(KINDS.filter(function (k) { return counts[k]; }));
+    names.forEach(function (n) {
+      var b = el("button", "fbtn", n);
+      b.type = "button";
+      b.setAttribute("aria-pressed", String(n === active));
+      b.appendChild(el("span", "", String(n === "Semua" ? all.length : counts[n])));
+      b.addEventListener("click", function () { active = n; render(); });
+      filters.appendChild(b);
+    });
+    filters.hidden = names.length < 3;
+  }
+
+  function render() {
+    var all = items.map(function (it) { var h = normUrl(it.link); return { it: it, href: h, kind: kindOf(h) }; });
+    renderFilters(all);
+    var term = q.value.trim().toLowerCase();
+    var list = all.filter(function (r) {
+      if (active !== "Semua" && r.kind !== active) return false;
+      return !term || (r.it.nama + " " + r.it.ket + " " + hostOf(r.href)).toLowerCase().indexOf(term) > -1;
+    });
+    grid.textContent = "";
+    list.forEach(function (r) {
+      var a = el("a", "card");
+      if (r.href) { a.href = r.href; a.target = "_blank"; a.rel = "noopener noreferrer"; }
+      var top = el("div", "top");
+      var chip = el("span", "chip", r.kind); chip.setAttribute("data-k", r.kind);
+      top.appendChild(chip);
+      if (r.it.no) top.appendChild(el("span", "num", r.it.no));
+      a.appendChild(top);
+      a.appendChild(el("span", "name", r.it.nama));
+      if (r.href) a.appendChild(el("span", "host", hostOf(r.href)));
+      if (r.it.ket) a.appendChild(el("span", "desc", r.it.ket));
+      grid.appendChild(a);
+    });
+    if (state === "loading" && !items.length) { empty.textContent = "Memuat daftar link..."; empty.hidden = false; }
+    else if (!items.length) { empty.textContent = "Belum ada link. Isi baris di sheet, lalu klik Muat ulang."; empty.hidden = false; }
+    else if (!list.length) { empty.textContent = "Tidak ada link yang cocok."; empty.hidden = false; }
+    else empty.hidden = true;
+    count.textContent = items.length ? list.length + " dari " + items.length + " link" : "";
+  }
+
+  function load() {
+    state = "loading"; notice.hidden = true; stamp.textContent = "Memuat dari sheet...";
+    fetch(CSV_URL, { cache: "no-store" })
+      .then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.text(); })
+      .then(function (txt) {
+        if (/^\s*<(!doctype|html)/i.test(txt)) throw new Error("Sheet belum dibagikan");
+        items = toItems(parseCSV(txt)); state = "ok";
+        try { localStorage.setItem(KEY, JSON.stringify(items)); } catch (e) {}
+        stamp.textContent = "Diperbarui " + new Date().toLocaleString("id-ID", { dateStyle: "medium", timeStyle: "short" });
+        render();
+      })
+      .catch(function () {
+        state = "error";
+        notice.textContent = "Sheet tidak bisa dimuat. Pastikan sheet dibagikan sebagai \"Siapa saja yang memiliki link\" (Pelihat).";
+        notice.hidden = false;
+        stamp.textContent = items.length ? "Menampilkan data tersimpan terakhir." : "";
+        render();
+      });
+  }
+
+  try { var cached = JSON.parse(localStorage.getItem(KEY) || "null"); if (cached && cached.length) items = cached; } catch (e) {}
+  q.addEventListener("input", render);
+  $("reload").addEventListener("click", load);
+  render(); load();
+})();
+</script>
+</body>
+</html>
