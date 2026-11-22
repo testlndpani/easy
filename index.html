@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="id"><head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0a2540">
 <title>Pelacak Kerja Tim L&amp;D — Merdeka Gold Resources</title>
 <link rel="icon" href="assets/logo-mgr-mark.png">
 <link rel="apple-touch-icon" href="assets/logo-mgr-mark.png">
@@ -381,21 +382,203 @@ dialog::backdrop{background:rgba(10,37,64,.45)}
   #print{display:block!important;width:100%}
 }
 
-/* RESPONSIF */
-@media(max-width:768px){
-  .sidebar{position:fixed;left:-260px;transition:left .2s}
-  .sidebar.mobile-open{left:0;box-shadow:4px 0 16px rgba(0,0,0,.15)}
-  body.nonav .sidebar{display:flex}
-  .kanban-grid{grid-auto-columns:minmax(84vw,1fr);height:calc(100dvh - 190px)}
-  .tk-filter{position:static}.sbox,.sbox .search-input{width:100%}
-  .topbar{padding:0 12px}.content-body{padding:16px 12px 40px}
-  .lbl{display:none}.search-input{width:100%}
-  .grid-2,.grid-3{grid-template-columns:1fr}
+/* ====================================================================
+   RESPONSIF — breakpoint:
+   >1100  desktop           | 901–1100 laptop kecil / tablet landscape
+   641–900 tablet portrait  | <=640 smartphone
+   ==================================================================== */
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+@supports(height:100dvh){.sidebar{height:100dvh}}
+.top-mark,.scrim{display:none}
+
+/* Laptop kecil / tablet landscape */
+@media(max-width:1100px){
+  .sidebar{width:216px}
+  .content-body{padding:20px 20px 40px}
+  .sbox .search-input{width:240px}
+  .topbar{padding:0 16px}
 }
+
+/* Tablet portrait & HP: menu samping jadi laci geser */
+@media(max-width:900px){
+  .sidebar{position:fixed;top:0;left:0;width:min(280px,84vw);z-index:30;transform:translateX(-102%);visibility:hidden;
+    transition:transform .22s ease,visibility 0s linear .22s;padding-bottom:env(safe-area-inset-bottom)}
+  .sidebar.mobile-open{transform:none;visibility:visible;transition:transform .22s ease;box-shadow:4px 0 24px rgba(0,0,0,.22)}
+  body.nonav .sidebar{display:flex}
+  .scrim{display:block;position:fixed;inset:0;z-index:25;background:rgba(10,37,64,.45);opacity:0;pointer-events:none;transition:opacity .2s}
+  .scrim.on{opacity:1;pointer-events:auto}
+  body.nav-open{overflow:hidden}
+  .top-mark{display:block;height:26px;width:auto;flex-shrink:0}
+  .topbar,.minibar{padding-left:max(12px,env(safe-area-inset-left));padding-right:max(12px,env(safe-area-inset-right))}
+  .content-body{padding:18px 16px 40px;padding-left:max(16px,env(safe-area-inset-left));padding-right:max(16px,env(safe-area-inset-right))}
+  .topbar-left{gap:8px}
+  .topbar .sync{font-size:0}.topbar .sync .m{font-size:18px}
+
+  /* filter tidak lagi menempel di atas (terlalu tinggi saat membungkus) */
+  .tk-filter,body.nohead .tk-filter{position:static}
+
+  /* kanban: tinggi mengikuti isi, kolom bisa digeser dengan snap */
+  .kanban-grid{height:auto;min-height:0;grid-auto-columns:max(280px,calc((100vw - 40px) / 2));scroll-snap-type:x mandatory;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch}
+  .col-body{max-height:calc(100dvh - 210px);min-height:120px}
+  .kanban-grid.single .col-body{max-height:none;min-height:0}
+  .card-meta{flex-wrap:wrap;justify-content:flex-end;row-gap:0}
+
+  /* tabel lebar: bayangan sebagai petunjuk bisa digeser */
+  .table-container,.tbl-scroll{-webkit-overflow-scrolling:touch;
+    background:linear-gradient(to right,#fff 30%,rgba(255,255,255,0)) left/36px 100% no-repeat local,
+               linear-gradient(to left,#fff 30%,rgba(255,255,255,0)) right/36px 100% no-repeat local,
+               linear-gradient(to right,rgba(15,23,42,.14),rgba(15,23,42,0)) left/10px 100% no-repeat scroll,
+               linear-gradient(to left,rgba(15,23,42,.14),rgba(15,23,42,0)) right/10px 100% no-repeat scroll,#fff}
+
+  .pv-canvas .print-sheet{zoom:1.1}
+  .links-grid{grid-template-columns:repeat(auto-fill,minmax(min(270px,100%),1fr))}
+}
+
+/* Tablet portrait kecil */
+@media(max-width:700px){
+  .lbl{display:none}
+  .topbar-right .btn{padding:7px 9px}
+}
+
+/* Smartphone */
+@media(max-width:640px){
+  .content-body{padding:14px 14px 40px;padding-left:max(14px,env(safe-area-inset-left));padding-right:max(14px,env(safe-area-inset-right))}
+
+  /* Topbar satu baris: menu · logo · (ruang) · sinkron · muat ulang · tambah. Pencarian global disembunyikan —
+     setiap halaman sudah punya kotak cari sendiri. */
+  .topbar{gap:8px}
+  .topbar-left{flex:0 0 auto;max-width:none}
+  .global-search{display:none}
+  .topbar-right{margin-left:auto;gap:4px}
+  .topbar-right>.ghost-ic:last-child{display:none}
+  .minibar .sync{font-size:11px}
+
+  .page-header{margin-bottom:14px;gap:10px}
+  .page-title{font-size:18px}
+  .page-desc{font-size:12px}
+  .ph-right{width:100%}
+
+  /* ringkasan status: strip yang bisa digeser, hemat tinggi layar */
+  .metric-strip{display:flex;overflow-x:auto;gap:8px;margin:0 -14px 14px;padding:2px 14px 4px;scroll-snap-type:x proximity;scroll-padding:0 14px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  .metric-strip::-webkit-scrollbar{display:none}
+  .metric-cell{flex:0 0 120px;scroll-snap-align:start;padding:9px 12px}
+  .metric-value{font-size:18px}
+
+  /* filter */
+  .filter-bar{padding:10px;gap:10px}
+  .filter-left,.filter-right{width:100%}
+  .filter-left .custom-select{flex:1 1 calc(50% - 4px);min-width:0}
+  .filter-right{justify-content:space-between}
+  .filter-bar .seg{max-width:100%;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}
+  .filter-bar .seg::-webkit-scrollbar{display:none}
+  .filter-bar .seg button{flex:0 0 auto}
+  .sbox,.sbox .search-input,.search-input{width:100%}
+  .quick-panel{padding:12px}
+  .quick-panel input{min-width:0;flex:1 1 100%}
+  .quick-panel .custom-select{flex:1 1 calc(50% - 5px);min-width:0}
+  .quick-panel .btn{flex:1 1 auto;justify-content:center}
+
+  /* kanban: kolom ~86% lebar layar, kolom berikutnya mengintip */
+  .kanban-grid:not(.single){grid-auto-columns:86vw;gap:10px;margin:0 -14px;padding:0 14px 10px;scroll-padding:0 14px}
+  .col-body{max-height:calc(100dvh - 180px)}
+  .kanban-grid.single .col-body{grid-template-columns:minmax(0,1fr)}
+
+  /* tabel → kartu */
+  .table-container{background:transparent;border:0;box-shadow:none;overflow:visible}
+  .data-table,.data-table tbody{display:block;width:100%}
+  .data-table thead{display:none}
+  .data-table tbody tr{display:flex;flex-direction:column;background:#fff;border:1px solid var(--border-subtle);border-radius:var(--radius-sm);
+    margin-bottom:10px;padding:2px 12px;box-shadow:var(--shadow-card)}
+  .data-table tbody tr.mine{border-left:3px solid var(--primary)}
+  .data-table tbody tr.mine td:first-child{border-left:0}
+  .data-table tbody tr:hover td{background:transparent}
+  .data-table tbody td{display:flex;align-items:center;justify-content:space-between;gap:12px;border:0;border-bottom:1px solid #f1f5f9;padding:9px 0;min-width:0}
+  .data-table tbody td:last-child{border-bottom:0}
+  .data-table td[data-l]::before{content:attr(data-l);flex:0 0 auto;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--text-tertiary)}
+  .data-table td .v{min-width:0;text-align:right}
+  .data-table td .pic-cell{justify-content:flex-end;text-align:left}
+  .data-table td.c-main{display:block;order:-1;padding:12px 0 10px}
+  .data-table td.c-main .t-desc{max-width:none}
+  .data-table td.prog-cell{display:block;min-width:0}
+  .data-table td.act{justify-content:flex-end;gap:2px;text-align:left;flex-wrap:wrap}
+
+  /* dialog → lembar dari bawah */
+  dialog,#dlg,#meDlg,#previewDlg{width:100%;max-width:100%;margin:auto 0 0;border-radius:14px 14px 0 0;max-height:92dvh;padding:16px 16px calc(16px + env(safe-area-inset-bottom))}
+  #previewDlg{padding:10px 10px calc(10px + env(safe-area-inset-bottom))}
+  .modal-header{margin-bottom:12px}
+  .grid-2,.grid-3{grid-template-columns:1fr}
+  .modal-actions{position:sticky;bottom:calc(-16px - env(safe-area-inset-bottom));z-index:2;background:#fff;margin:14px -16px calc(-16px - env(safe-area-inset-bottom));
+    padding:12px 16px calc(12px + env(safe-area-inset-bottom));flex-wrap:wrap}
+  .modal-actions .btn{flex:1 1 auto;justify-content:center}
+  #toast{left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));max-width:none;text-align:center}
+
+  /* Leave Handover */
+  .ho-sheet{padding:14px 12px}
+  .dh{gap:10px}
+  .dh-m{width:100%}
+  .ho-bar{padding:10px}
+  .ho-bar>span:last-child{width:100%}
+  .ho-bar>span:last-child .btn{flex:1 1 auto;justify-content:center}
+  .doc-section-header{padding:6px 10px}
+
+  .table-form.kv,.table-form.kv tbody,.table-form.kv tr,.table-form.kv th,.table-form.kv td{display:block;width:100%}
+  .table-form.kv tr{margin-bottom:6px}
+  .table-form.kv th{border-bottom:0;background:none;padding:8px 8px 2px;color:var(--text-muted)}
+  .table-form.kv td{border-top:0;padding:2px 8px 8px}
+
+  .tbl-scroll{background:none}
+  .tbl-scroll .table-form.ti,.tbl-scroll .table-form.tsign{min-width:0}
+  .table-form.ti,.table-form.ti tbody,.table-form.ti tr,.table-form.ti td{display:block;width:100%;border:0}
+  .table-form.ti thead{display:none}
+  .table-form.ti tr{position:relative;border:1px solid var(--border-strong);border-radius:var(--radius-sm);padding:8px 10px 10px;margin:0 0 10px;background:#fff}
+  .table-form.ti td{padding:4px 0}
+  .table-form.ti td[data-l]::before{content:attr(data-l);display:block;font-size:10.5px;font-weight:600;color:var(--text-muted);margin-bottom:2px}
+  .table-form.ti td.c{width:auto;text-align:left;font-weight:700;color:var(--primary);padding:0 0 2px}
+  .table-form.ti td.c::before{content:'No. '}
+  .table-form.ti td:last-child{position:absolute;top:2px;right:2px;width:auto;padding:0}
+  .table-form.ti input,.table-form.ti select{min-width:0;min-height:38px}
+
+  .table-form.tsign,.table-form.tsign tbody,.table-form.tsign tr,.table-form.tsign th,.table-form.tsign td{display:block;width:100%!important;border:0;white-space:normal!important}
+  .table-form.tsign tr{border:1px solid var(--border-strong);border-radius:var(--radius-sm);padding:8px 10px;margin-bottom:10px;background:#fff}
+  .table-form.tsign th{background:none;padding:0 0 4px;white-space:normal}
+  .table-form.tsign td{padding:4px 0}
+
+  .pv-bar{font-size:11px;padding:8px 10px}
+  .pv-canvas{padding:8px}
+  .pv-canvas .print-sheet{zoom:1.15}
+}
+
+/* Layar sentuh: target ketuk lebih besar, input 16px agar iOS tidak zoom otomatis */
+@media(pointer:coarse){
+  .ghost-ic{padding:8px}
+  .icon-btn{width:36px;height:36px}
+  .card-meta .icon-btn{width:32px;height:32px}
+  .btn{min-height:38px}
+  .btn-subtle{padding:8px 10px;min-height:34px}
+  .seg button{min-height:34px;padding:6px 12px}
+  .mv button{padding:6px 3px}
+  .nav-item{padding:12px}
+  .sclr{padding:6px}
+  .subtask-item{padding:4px 0}
+  .subtask-item input{width:18px;height:18px;margin-top:0}
+  .subtask-actions button{padding:4px 6px}
+  .subc>summary,.prog-cell details>summary,.subtasks-box details>summary{padding:6px 0}
+  .search-input,.custom-select,.inp,.global-search input,.form-group input,.form-group select,.form-group textarea,.table-form input,.table-form select{font-size:16px}
+  .table-form input,.table-form select{min-height:38px}
+}
+
+/* HP landscape (layar pendek) */
+@media(max-height:500px) and (orientation:landscape){
+  .topbar{height:44px}
+  .col-body{max-height:calc(100dvh - 110px)}
+  dialog,#dlg,#meDlg,#previewDlg{max-height:96dvh}
+}
+
+@media(prefers-reduced-motion:reduce){.sidebar,.scrim{transition:none!important}}
 </style></head>
 <body>
 <div class="app-container">
-<aside class="sidebar" id="sidebar">
+<aside class="sidebar" id="sidebar" aria-label="Menu utama">
   <div class="sidebar-header"><div class="brand-logo"><img src="assets/logo-mgr-long.png" alt="Merdeka Gold Resources"><p>Learning &amp; Development</p></div></div>
   <div class="sidebar-nav">
     <div class="nav-section-label">Workspace</div>
@@ -408,11 +591,13 @@ dialog::backdrop{background:rgba(10,37,64,.45)}
   </div>
   <div class="sidebar-footer"><div class="user-snippet" onclick="askWho()" title="Klik untuk ganti akun"><div class="avatar" id="meAv">?</div><div class="user-info"><div class="user-name" id="meNm">Belum masuk</div><div class="user-role" id="mePos">Klik untuk memilih akun</div></div></div></div>
 </aside>
+<div class="scrim" id="scrim" onclick="closeNav()"></div>
 
 <div class="main-wrapper">
 <header class="topbar">
   <div class="topbar-left">
-    <button class="ghost-ic" onclick="togNav()" title="Tampilkan / sembunyikan menu samping"><span class="m">menu</span></button>
+    <button class="ghost-ic" onclick="togNav()" title="Tampilkan / sembunyikan menu samping" aria-label="Menu"><span class="m">menu</span></button>
+    <img class="top-mark" src="assets/logo-mgr-mark.png" alt="Merdeka Gold Resources">
     <label class="global-search"><span class="m" style="color:var(--text-tertiary)">search</span><input id="gq" oninput="gsearch(this.value)" placeholder="Cari penugasan, modul training, PIC, atau dokumen..." type="text"></label>
   </div>
   <div class="topbar-right">
@@ -424,7 +609,7 @@ dialog::backdrop{background:rgba(10,37,64,.45)}
   </div>
 </header>
 <div class="minibar">
-  <button class="ghost-ic" onclick="togNav()" title="Menu samping"><span class="m">menu</span></button>
+  <button class="ghost-ic" onclick="togNav()" title="Menu samping" aria-label="Menu"><span class="m">menu</span></button>
   <span class="sync" id="busy2" style="margin-left:auto"></span>
   <button class="ghost-ic" onclick="togHead()" title="Tampilkan header"><span class="m">expand_more</span></button>
 </div>
@@ -627,7 +812,7 @@ function setBusy(){['#busy','#busy2'].forEach(s=>{const b=$(s);if(!b)return;
 function toast(m,ms){const t=$('#toast');t.textContent=m;t.style.display='block';clearTimeout(toast.h);toast.h=setTimeout(()=>t.style.display='none',ms||2400)}
 
 /* ============ NAVIGASI & KERANGKA ============ */
-function nav(k){$('#sidebar').classList.remove('mobile-open');
+function nav(k){closeNav();
  if(k==='email')scr='email';else if(k==='dash')scr='task';else if(k==='mine')scr='mine';else if(k==='ho'){scr='ho';hot='list'}else if(k==='links')scr='links';
  $('#gq').value=scr==='email'?eq:scr==='links'?lq:q;draw()}
 function drawNav(){
@@ -643,7 +828,11 @@ function gsearch(v){
 const UI=(k,v)=>LS(k,v);
 function applyUI(){document.body.classList.toggle('nohead',UI('ld_nohead')==='1');document.body.classList.toggle('nonav',UI('ld_nonav')==='1')}
 function togHead(){UI('ld_nohead',UI('ld_nohead')==='1'?'':'1');applyUI()}
-function togNav(){if(matchMedia('(max-width:768px)').matches)$('#sidebar').classList.toggle('mobile-open');else{UI('ld_nonav',UI('ld_nonav')==='1'?'':'1');applyUI()}}
+/* Layar <=900px (HP & tablet portrait): menu samping jadi laci geser dengan latar gelap. Di atasnya: tampil/sembunyi seperti semula. */
+const NAVMQ=matchMedia('(max-width:900px)');
+function closeNav(){$('#sidebar').classList.remove('mobile-open');$('#scrim').classList.remove('on');document.body.classList.remove('nav-open')}
+function togNav(){if(NAVMQ.matches){const o=$('#sidebar').classList.toggle('mobile-open');$('#scrim').classList.toggle('on',o);document.body.classList.toggle('nav-open',o)}else{UI('ld_nonav',UI('ld_nonav')==='1'?'':'1');applyUI()}}
+NAVMQ.addEventListener?NAVMQ.addEventListener('change',closeNav):NAVMQ.addListener(closeNav);
 const pageHead=(ic,t,d,r)=>`<div class="page-header"><div><div class="dept-tag"><span class="m">${ic}</span> HUMAN CAPITAL • LEARNING &amp; DEVELOPMENT</div><h1 class="page-title">${t}</h1><p class="page-desc">${d}</p></div><div class="ph-right">${r||''}</div></div>`;
 const skel=()=>`<div class="skel">${'<div class="sk-row"></div>'.repeat(6)}</div>`;
 const gate=()=>loaded?'':(loadErr?`<div class="empty-box"><span class="m">cloud_off</span><div><b>Data belum bisa dimuat</b><br>${esc(loadErr)}</div><button class="btn btn-primary btn-sm" onclick="loadErr='';draw();run('getData')">Coba lagi</button></div>`:skel());
@@ -683,10 +872,10 @@ function card(t){const dn=t.status==='Selesai',id=esc(t.task_id);
  <div class="card-bottom"><div class="card-pic"><span class="pic-dot">${esc(ini(t.pic_id))}</span><span>${hl(nm(t.pic_id))}</span>${t.co_pic_id?`<span class="pic-dot" title="PIC kedua: ${esc(nm(t.co_pic_id))}">${esc(ini(t.co_pic_id))}</span>`:''}</div>
  <div class="card-meta">${compact&&!subs(t.task_id).length?`<button class="icon-btn" title="Tambah sub-tugas" data-a="addsub" data-id="${id}"><span class="m">playlist_add</span></button>`:''}${dueHTML(t)}${attC(t)}${acts(t,false)}</div></div></div>`}
 function row(t){const dn=t.status==='Selesai',id=esc(t.task_id),p=prog(t),u=usr(t.pic_id);
- return `<tr class="${dn?'done ':''}${mineT(t)?'mine':''}"><td>${stBadge(t.status)}</td>
- <td><div class="t-title"><span class="card-id">${id}${CV.has(t.pic_id)&&t.pic_id!==ME?'<span class="badge b-backup">Backup</span>':''}</span><span class="t-name">${esc(t.title)}</span>${t.category?`<span class="badge b-cat">${esc(t.category)}</span>`:''}${attR(t)}</div>${t.description?`<div class="t-desc">${esc(t.description)}</div>`:''}${t.notes?`<div class="t-desc" style="color:#92400e">Catatan: ${esc(t.notes)}</div>`:''}</td>
- <td><div class="pic-cell"><span class="pic-av">${esc(ini(t.pic_id))}</span><div><div class="pic-n">${esc(u.full_name||t.pic_id||'-')}</div><div class="pic-p">${esc(u.position||'')}</div>${t.co_pic_id?`<div class="pic-p">+ ${esc(nm(t.co_pic_id))}</div>`:''}</div></div></td>
- <td>${dueHTML(t)}</td><td>${prioBadge(t.priority)}</td>
+ return `<tr class="${dn?'done ':''}${mineT(t)?'mine':''}"><td data-l="Status"><div class="v">${stBadge(t.status)}</div></td>
+ <td class="c-main"><div class="t-title"><span class="card-id">${id}${CV.has(t.pic_id)&&t.pic_id!==ME?'<span class="badge b-backup">Backup</span>':''}</span><span class="t-name">${esc(t.title)}</span>${t.category?`<span class="badge b-cat">${esc(t.category)}</span>`:''}${attR(t)}</div>${t.description?`<div class="t-desc">${esc(t.description)}</div>`:''}${t.notes?`<div class="t-desc" style="color:#92400e">Catatan: ${esc(t.notes)}</div>`:''}</td>
+ <td data-l="PIC"><div class="v"><div class="pic-cell"><span class="pic-av">${esc(ini(t.pic_id))}</span><div><div class="pic-n">${esc(u.full_name||t.pic_id||'-')}</div><div class="pic-p">${esc(u.position||'')}</div>${t.co_pic_id?`<div class="pic-p">+ ${esc(nm(t.co_pic_id))}</div>`:''}</div></div></div></td>
+ <td data-l="Tenggat"><div class="v">${dueHTML(t)}</div></td><td data-l="Prioritas"><div class="v">${prioBadge(t.priority)}</div></td>
  <td class="prog-cell"><div class="prog-line"><span>${p.total?`${p.done}/${p.total} sub-tugas`:'Tanpa sub-tugas'}</span><span class="mono">${p.pct}%</span></div><div class="progress-track"><div class="progress-fill ${p.pct===100?'full':''}" style="width:${p.pct}%"></div></div>
  <details data-id="${id}" ${OPEN.has(t.task_id)?'open':''} ontoggle="togOpen(this)"><summary>kelola sub-tugas</summary>${subHTML(t,false,true)}</details></td>
  <td class="act">${acts(t,true)}</td></tr>`}
@@ -784,9 +973,9 @@ function drawEmailRows(){const el=$('#elist');if(!el)return;
  el.innerHTML=warn+(!all.length?'<div class="empty-box"><span class="m">inbox</span><div>Belum ada email. Pastikan sheet “FROM EMAIL” ada di spreadsheet ini dan berisi data, lalu klik muat ulang.</div></div>'
  :!v.length?`<div class="empty-box"><span class="m">${ef==='Baru'&&!t?'task_alt':'search_off'}</span><div>${ef==='Baru'&&!t?'Semua email sudah dijadikan tugas.':'Tidak ada email yang cocok.'}</div>${ef!=='Semua'?`<button class="btn btn-secondary btn-sm" onclick="ef='Semua';drawEmailRows()">Tampilkan semua email</button>`:''}</div>`
  :`<div class="table-container"><table class="data-table"><thead><tr><th>Tanggal</th><th>Pengirim</th><th style="min-width:300px">Subjek &amp; isi</th><th>Status</th><th style="text-align:right">Aksi</th></tr></thead><tbody>${v.map(e=>{const tk=emTask(e),u=lnUrl(e.link);
-  return `<tr class="${tk&&tk.status==='Selesai'?'done':''}"><td style="white-space:nowrap" class="mono">${esc(e.tanggal||'-')}</td><td><b>${esc(e.dari||'-')}</b></td>
-  <td><div class="t-name">${esc(e.subjek||'-')}</div>${e.isi?`<details class="em-d"><summary>${esc(e.isi.replace(/\s+/g,' ').slice(0,160))}${e.isi.length>160?'… <u>lihat detail</u>':''}</summary><div class="em-full">${esc(e.isi)}</div></details>`:'<div class="t-desc" style="font-style:italic">(isi email kosong / kolom isi belum terbaca)</div>'}</td>
-  <td>${tk?`<span class="badge-status" data-s="${tk.status}">${esc(tk.task_id)} · ${tk.status}</span>`:'<span class="badge-status" data-s="Plan">Baru</span>'}</td>
+  return `<tr class="${tk&&tk.status==='Selesai'?'done':''}"><td style="white-space:nowrap" class="mono" data-l="Tanggal"><div class="v">${esc(e.tanggal||'-')}</div></td><td data-l="Pengirim"><div class="v"><b>${esc(e.dari||'-')}</b></div></td>
+  <td class="c-main"><div class="t-name">${esc(e.subjek||'-')}</div>${e.isi?`<details class="em-d"><summary>${esc(e.isi.replace(/\s+/g,' ').slice(0,160))}${e.isi.length>160?'… <u>lihat detail</u>':''}</summary><div class="em-full">${esc(e.isi)}</div></details>`:'<div class="t-desc" style="font-style:italic">(isi email kosong / kolom isi belum terbaca)</div>'}</td>
+  <td data-l="Status"><div class="v">${tk?`<span class="badge-status" data-s="${tk.status}">${esc(tk.task_id)} · ${tk.status}</span>`:'<span class="badge-status" data-s="Plan">Baru</span>'}</div></td>
   <td class="act">${tk?'':`<button class="btn btn-secondary btn-sm" data-a="fromem" data-id="${esc(e.id)}"><span class="m">add_task</span>Jadikan tugas</button>`}${u?`<a class="icon-btn" href="${esc(u)}" target="_blank" rel="noopener" title="Buka email"><span class="m">open_in_new</span></a>`:''}</td></tr>`}).join('')}</tbody></table></div>`)}
 function fromEmail(id){const e=D.emails.find(x=>x.id===id);if(!e)return;openForm('','Plan');srcRef=id;
  $('#dt').textContent='Tugas dari email';$('#f_title').value=e.subjek;
@@ -878,17 +1067,17 @@ function listHO(){
  if(!D.hos.length)return tabs+'<div class="empty-box"><span class="m">flight_takeoff</span><div>Belum ada handover cuti. Klik <b>Buat Handover Baru</b> untuk memulai.</div></div>';
  if(!v.length)return tabs+`<div class="empty-box"><span class="m">task_alt</span><div>Tidak ada dokumen pada filter ini.</div><button class="btn btn-secondary btn-sm" onclick="hf='Semua';draw()">Tampilkan semua</button></div>`;
  return tabs+`<div class="table-container"><table class="data-table"><thead><tr><th>ID</th><th>Karyawan</th><th>Periode cuti</th><th>PIC / Backup</th><th>Pekerjaan</th><th>Konfirmasi</th><th>Status</th><th style="text-align:right">Aksi</th></tr></thead><tbody>${v.map(h=>{const n=nsig(h),id=esc(h.handover_id);
-  return `<tr class="${n===3?'done':''}"><td class="mono"><b>${id}</b></td><td><div class="pic-n">${esc(usr(h.employee_id).full_name||h.employee_id)}</div><div class="pic-p">${esc(h.position)}</div></td>
-  <td>${pd(h.start_date)} – ${pd(h.end_date)}<div class="pic-p">${leaveDays(h)}</div></td><td>${esc(usr(h.backup_id).full_name||h.backup_id)}</td>
-  <td>${D.items.filter(i=>i.handover_id===h.handover_id&&i.section==='WORK').length} item</td><td><span class="mono">${n}/3</span></td>
-  <td><span class="ho-badge ${n===3?'ho-signed':'ho-pending'}">${n===3?'Lengkap':'Menunggu konfirmasi'}</span></td>
+  return `<tr class="${n===3?'done':''}"><td class="mono" data-l="No. Dokumen"><div class="v"><b>${id}</b></div></td><td class="c-main"><div class="pic-n">${esc(usr(h.employee_id).full_name||h.employee_id)}</div><div class="pic-p">${esc(h.position)}</div></td>
+  <td data-l="Periode cuti"><div class="v">${pd(h.start_date)} – ${pd(h.end_date)}<div class="pic-p">${leaveDays(h)}</div></div></td><td data-l="PIC / Backup"><div class="v">${esc(usr(h.backup_id).full_name||h.backup_id)}</div></td>
+  <td data-l="Pekerjaan"><div class="v">${D.items.filter(i=>i.handover_id===h.handover_id&&i.section==='WORK').length} item</div></td><td data-l="Konfirmasi"><div class="v"><span class="mono">${n}/3</span></div></td>
+  <td data-l="Status"><div class="v"><span class="ho-badge ${n===3?'ho-signed':'ho-pending'}">${n===3?'Lengkap':'Menunggu konfirmasi'}</span></div></td>
   <td class="act"><button class="icon-btn" title="Buka" data-a="hoedit" data-id="${id}"><span class="m">edit</span></button><button class="icon-btn" title="Pratinjau cetak" data-a="hoprev" data-id="${id}"><span class="m">visibility</span></button><button class="icon-btn" title="Cetak" data-a="hoprint" data-id="${id}"><span class="m">print</span></button><button class="icon-btn" title="Hapus" data-a="hodel" data-id="${id}"><span class="m del">delete</span></button></td></tr>`}).join('')}</tbody></table></div>`}
 function formHTML(){
  if(!H)return'';const h=H.h,own=D.tasks.filter(t=>t.pic_id===h.employee_id&&t.status!=='Selesai'),miss=own.filter(t=>!H.items.some(x=>x.section==='WORK'&&x.title===t.title)).length;
  const sel=k=>`<select class="inp" style="width:100%" onchange="setH('${k}',this.value)"><option value="">— pilih —</option>${D.users.filter(u=>u.user_id!==h.employee_id).map(u=>`<option value="${esc(u.user_id)}" ${h[k]===u.user_id?'selected':''}>${esc(u.full_name)}${u.position?' — '+esc(u.position):''}</option>`).join('')}</select>`;
  const dpk=k=>`<input type="date" value="${esc(ymd(h[k]))}" oninput="H.h.${k}=this.value;drawDays()">`;
  const sec=([k,t,hd,f])=>{let n=0;return `<div class="doc-section-card"><div class="doc-section-header"><span class="doc-section-title">${t}</span>${k==='WORK'&&miss?`<button class="btn-subtle" onclick="importTasks()">• ${miss} tugas aktif Anda belum masuk — tambahkan semua</button>`:''}<button class="btn-subtle" onclick="addI('${k}')">+ Tambah Baris</button></div>
-  <div class="tbl-scroll"><table class="table-form"><thead><tr><th class="c">No</th>${hd.map(z=>`<th>${z}</th>`).join('')}<th></th></tr></thead><tbody>${H.items.map((x,i)=>x.section!==k?'':`<tr class="${k==='WORK'&&x.status==='Selesai'?'done':''}"><td class="c">${++n}</td>${f.map(c=>`<td>${cell(x,i,c)}</td>`).join('')}<td><button class="icon-btn" title="Hapus baris" onclick="delI(${i})"><span class="m">close</span></button></td></tr>`).join('')}</tbody></table></div></div>`};
+  <div class="tbl-scroll"><table class="table-form ti"><thead><tr><th class="c">No</th>${hd.map(z=>`<th>${z}</th>`).join('')}<th></th></tr></thead><tbody>${H.items.map((x,i)=>x.section!==k?'':`<tr class="${k==='WORK'&&x.status==='Selesai'?'done':''}"><td class="c">${++n}</td>${f.map((c,ci)=>`<td data-l="${hd[ci]}">${cell(x,i,c)}</td>`).join('')}<td><button class="icon-btn" title="Hapus baris" onclick="delI(${i})"><span class="m">close</span></button></td></tr>`).join('')}</tbody></table></div></div>`};
  return `<datalist id="tl">${own.map(t=>`<option value="${esc(t.title)}">`).join('')}</datalist>
  <div class="ho-bar"><span>Pilih pekerjaan dari daftar tugas karyawan yang cuti (status, tenggat, prioritas terisi otomatis), atau pilih “Ketik sendiri”. Baris kosong tidak disimpan.</span><span style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-secondary btn-sm" onclick="importTasks()"><span class="m">download</span>Impor Tugas Harian</button><button class="btn btn-secondary btn-sm" onclick="previewHO()"><span class="m">visibility</span>Pratinjau</button><button class="btn btn-secondary btn-sm" onclick="printHO()"><span class="m">print</span>Cetak</button><button class="btn btn-primary btn-sm" onclick="saveHO()"><span class="m">check</span>Simpan</button></span></div>
  <div class="ho-sheet">${hdrHTML(h)}<div class="doc-section-card"><div class="doc-section-header"><span class="doc-section-title">A. Informasi Karyawan &amp; Periode Cuti</span></div>
@@ -897,7 +1086,7 @@ function formHTML(){
  <tr><th>Tanggal Mulai Cuti</th><td>${dpk('start_date')}</td><th>Tanggal Selesai Cuti</th><td>${dpk('end_date')} <span id="dys" class="mono" style="color:var(--text-muted)">${leaveDays(h)}</span></td></tr>
  <tr><th>PIC Pengganti (Backup)</th><td>${sel('backup_id')}</td><th>Tanggal Serah Terima</th><td>${dpk('handover_date')}</td></tr></table></div>
  ${SEC.map(sec).join('')}
- <div class="doc-section-card"><div class="doc-section-header"><span class="doc-section-title">F. Pengesahan Serah Terima Tugas (Sign-off Protocol)</span></div><div class="tbl-scroll"><table class="table-form">${SIGN.map(([k,l,tx,uk])=>{const at=h['sign_'+k+'_at'],w=h[uk];
+ <div class="doc-section-card"><div class="doc-section-header"><span class="doc-section-title">F. Pengesahan Serah Terima Tugas (Sign-off Protocol)</span></div><div class="tbl-scroll"><table class="table-form tsign">${SIGN.map(([k,l,tx,uk])=>{const at=h['sign_'+k+'_at'],w=h[uk];
   return `<tr><th style="width:24%">${l}<div style="font-weight:400;color:var(--text-muted)">${esc(usr(w).full_name||'-')}</div></th><td style="font-size:11px;color:#334155;line-height:1.3">${tx}</td><td style="white-space:nowrap;width:190px">${at?`<span class="ho-badge ho-signed"><span class="m" style="font-size:13px">check_circle</span> ${esc(at)}</span>`:!h.handover_id?'<span class="mono" style="color:var(--text-tertiary)">Simpan dulu</span>':ME===w?`<button class="btn btn-primary btn-sm" data-a="sign" data-id="${esc(h.handover_id)}|${k}"><span class="m">ink_pen</span>Konfirmasi</button>`:`<span class="mono" style="color:var(--text-tertiary)">Menunggu ${esc(nm(w))}</span>`}</td></tr>`}).join('')}</table></div></div></div>`}
 function saveHO(){const h=H.h,er=[],its=H.items.filter(x=>!isEmpty(x));its.forEach(x=>{if(x.pic==='-')x.pic=''});
  if(!h.start_date||!h.end_date)er.push('tanggal mulai & akhir cuti');if(!h.backup_id)er.push('PIC / Backup');if(!its.some(x=>x.section==='WORK'))er.push('minimal 1 pekerjaan di bagian B');
@@ -939,7 +1128,7 @@ function printHO(id){const o=printSrc(id);if(!o){toast('Tidak ada handover untuk
 function previewHO(id){const o=printSrc(id);if(!o){toast('Tidak ada handover untuk dipratinjau.');return}const html=printHTML(o);$('#pvId').textContent=o.h.handover_id||'DRAFT';$('#pvc').innerHTML=html;$('#print').innerHTML=html;$('#previewDlg').showModal()}
 
 /* ============ AKUN ============ */
-function askWho(){$('#meSel').innerHTML=D.users.map(u=>`<option value="${esc(u.user_id)}" ${u.user_id===ME?'selected':''}>${esc(u.full_name)} — ${esc(u.position)}</option>`).join('');if(D.users.length&&!$('#meDlg').open)$('#meDlg').showModal()}
+function askWho(){closeNav();$('#meSel').innerHTML=D.users.map(u=>`<option value="${esc(u.user_id)}" ${u.user_id===ME?'selected':''}>${esc(u.full_name)} — ${esc(u.position)}</option>`).join('');if(D.users.length&&!$('#meDlg').open)$('#meDlg').showModal()}
 function setMe(){ME=$('#meSel').value;LS('ld_me',ME);$('#meDlg').close();H=null;draw()}
 $('#meDlg').addEventListener('cancel',e=>{if(!usr(ME).user_id)e.preventDefault()});
 
@@ -955,7 +1144,8 @@ document.addEventListener('dragover',e=>{const g=$('.kanban-grid');if(!g||g.clas
  const b=e.target.closest&&e.target.closest('.col-body');if(b){const br=b.getBoundingClientRect();if(e.clientY<br.top+40)b.scrollTop-=14;else if(e.clientY>br.bottom-40)b.scrollTop+=14}
  if(e.clientY<90)window.scrollBy(0,-12);else if(e.clientY>innerHeight-60)window.scrollBy(0,12)});
 document.addEventListener('keydown',e=>{if(e.key==='/'&&(scr==='task'||scr==='mine')&&!/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName)&&!document.querySelector('dialog[open]')){e.preventDefault();const i=$('#q');if(i){i.focus();i.select()}}
- else if(e.key==='Escape'&&document.activeElement===$('#q')){gsearch('');$('#q').blur()}});
+ else if(e.key==='Escape'&&document.activeElement===$('#q')){gsearch('');$('#q').blur()}
+ else if(e.key==='Escape'&&$('#sidebar').classList.contains('mobile-open'))closeNav()});
 document.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b||!ACT[b.dataset.a])return;e.preventDefault();ACT[b.dataset.a](b.dataset.id)});
 document.addEventListener('change',e=>{const c=e.target;if(c.matches&&c.matches('[data-a="tog"]'))togSub(c.dataset.id,c.checked)});
 document.addEventListener('visibilitychange',()=>{if(!document.hidden&&Date.now()-LASTSYNC>45000&&!BUSY&&!document.querySelector('dialog[open]')&&!(scr==='ho'&&hot==='form'))run('getData')});
