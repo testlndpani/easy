@@ -14,7 +14,7 @@ window.__first=fetch(API_URL,{method:'POST',headers:{'Content-Type':'text/plain;
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@300;400;500&display=block" rel="stylesheet">
 <style>
 :root{
@@ -271,6 +271,24 @@ tr.done input:not([type=checkbox]),tr.done select{color:var(--text-tertiary)}
 .ho-pending{background:#fffbeb;color:#b45309;border:1px solid #fde68a}
 .ho-bar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px;font-size:12px;color:var(--text-muted)}
 
+/* HANDOVER: gaya dokumen korporat (monokrom) */
+.ho-sheet .doc-section-card{background:none;border:0;box-shadow:none;overflow:visible;margin-bottom:16px}
+.ho-sheet .doc-section-header{background:none;border:0;border-bottom:1px solid #111827;padding:0 0 4px;margin-bottom:6px}
+.ho-sheet .doc-section-title{font-size:10.5px;color:#111827;letter-spacing:.06em}
+.ho-sheet .table-form{border:1px solid #d1d5db}
+.ho-sheet .table-form th,.ho-sheet .table-form td{border:1px solid #d1d5db}
+.ho-sheet .table-form th{background:#f9fafb;color:#4b5563;font-weight:500}
+.ho-sheet .table-form thead th{background:#f3f4f6;color:#1f2937;font-weight:600}
+.ho-sheet .table-form input,.ho-sheet .table-form select{border-radius:2px;border-color:#d1d5db}
+.ho-sheet .table-form input:focus,.ho-sheet .table-form select:focus{border-color:#111827}
+.ho-bar{background:#fff;border:1px solid #d1d5db;border-radius:2px;padding:6px 10px;box-shadow:0 1px 2px rgba(0,0,0,.05)}
+.ho-bar .btn{border-radius:2px}.ho-bar .btn-primary{background:#111827;border-color:#111827;color:#fff}
+.ho-badge{border-radius:2px}
+.ho-signed{background:#f3f4f6;color:#111827;border:1px solid #9ca3af}
+.ho-pending{background:#fff;color:#4b5563;border:1px dashed #9ca3af}
+#hv .table-container{border:1px solid #d1d5db;border-radius:2px;box-shadow:none}
+#hv .data-table thead th{background:#f3f4f6;color:#1f2937;font-weight:600;border-bottom:1px solid #9ca3af}
+
 /* AKSES CEPAT */
 .links-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:12px}
 .link-card{background:#fff;border:1px solid var(--border-subtle);border-radius:var(--radius-xs);padding:14px;display:flex;flex-direction:column;gap:6px;min-width:0;box-shadow:var(--shadow-subtle);transition:all .12s}
@@ -311,33 +329,50 @@ dialog::backdrop{background:rgba(10,37,64,.45)}
 .modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:18px;padding-top:12px;border-top:1px solid var(--border-subtle)}
 #toast{position:fixed;bottom:24px;right:24px;background:var(--primary);color:#fff;padding:10px 16px;border-radius:var(--radius-xs);font-size:12px;font-weight:500;display:none;z-index:100;box-shadow:var(--shadow-pop);max-width:80vw}
 
-/* CETAK A4 */
+/* CETAK A4 + DOKUMEN (gaya korporat monokrom) */
 #print{display:none}
-.print-sheet{font-family:'Plus Jakarta Sans',Arial,sans-serif;color:#0f172a;line-height:1.15;font-size:8px;background:#fff}
-.ps-header{display:flex;justify-content:space-between;align-items:center;border-bottom:1.5px solid #0f172a;padding-bottom:4px;margin-bottom:4px}
-.ps-brand{display:flex;align-items:center;gap:8px}
-.ps-logo-img{height:30px;width:auto;display:block}
-.ps-logo-badge{background:#0a2540;color:#fff;font-weight:800;font-size:11px;padding:3px 6px;border-radius:2px;letter-spacing:.05em;border-bottom:2px solid #c59b27;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-.ps-title{font-size:12.5px;font-weight:800;color:#0a2540;letter-spacing:.02em;margin:0;line-height:1.1}
-.ps-sub{font-size:7.5px;color:#475569;margin-top:1px}
-.ps-meta{text-align:right;font:400 8.5px 'JetBrains Mono',monospace}
-.ps-sec-head{font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:.03em;background:#e2e8f0;color:#0a2540;padding:2px 5px;margin:4px 0 2px;border-left:3px solid #0a2540;-webkit-print-color-adjust:exact;print-color-adjust:exact;break-inside:avoid}
-.pt{width:100%;border-collapse:collapse;font-size:7.5px;line-height:1.12;margin-bottom:3px}
+.print-sheet,.ho-sheet{font-family:'Inter',-apple-system,'Segoe UI',Roboto,Arial,sans-serif;color:#111827;background:#fff;-webkit-font-smoothing:antialiased}
+.print-sheet{font-size:8px;line-height:1.3}
+.print-sheet *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.ho-sheet{font-size:11px;line-height:1.4;border:1px solid #d1d5db;border-radius:2px;padding:20px 22px;box-shadow:0 1px 3px rgba(0,0,0,.08);margin-bottom:12px}
+.dh{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;border-bottom:1px solid #111827;padding-bottom:.4em;margin-bottom:.9em}
+.dh-l{display:flex;align-items:center;gap:.9em}
+.dh-logo{width:3.4em;height:3.4em;border:1px solid #111827;background:#f9fafb;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.dh-logo img{width:70%;height:70%;object-fit:contain}
+.dh-co{font-size:1.1em;font-weight:700;letter-spacing:-.01em}
+.dh-t{font-size:1.2em;font-weight:700;margin-top:.15em;letter-spacing:-.01em}
+.dh-s{font-size:.95em;color:#6b7280;margin-top:.15em}
+.dh-m{border-collapse:collapse;font-size:.95em}
+.dh-m td{border:1px solid #d1d5db;padding:.15em .6em}
+.dh-m td:first-child{background:#f9fafb;color:#4b5563;font-weight:500}
+.dh-m td:last-child{font-weight:600}
+.ps-sec-head{display:flex;justify-content:space-between;align-items:baseline;font-size:1.05em;font-weight:700;text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid #111827;padding-bottom:.2em;margin:.9em 0 .35em;break-inside:avoid}
+.ps-sec-head small{font-weight:400;text-transform:none;letter-spacing:0;color:#6b7280;font-size:.9em}
+.pt{width:100%;border-collapse:collapse;font-size:.95em;line-height:1.3}
 .pt tr{break-inside:avoid}
-.pt th,.pt td{border:.75px solid #cbd5e1;padding:2px 4px;vertical-align:middle;text-align:left}
-.pt th{background:#f1f5f9;color:#1e293b;font-weight:700;white-space:nowrap;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.pt th,.pt td{border:1px solid #d1d5db;padding:.25em .5em;vertical-align:middle;text-align:left}
+.pt thead th{background:#f3f4f6;color:#1f2937;font-weight:600}
+.pt th.k{background:#f9fafb;color:#4b5563;font-weight:500}
+.pt.z tbody tr:nth-child(even) td{background:rgba(249,250,251,.7)}
 .pt .c{text-align:center}
-.pt .mono,.sign-card .mono{font-size:inherit}
-.pt-badge{display:inline-block;font-size:7px;font-weight:700;padding:1px 4px;border-radius:2px;line-height:1.1;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-.pt-high{background:#fef2f2;color:#b91c1c;border:.5px solid #fecaca}.pt-med{background:#fffbeb;color:#b45309;border:.5px solid #fde68a}.pt-low{background:#f8fafc;color:#475569;border:.5px solid #e2e8f0}
-.ps-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:6px;break-inside:avoid}
-.ps-sign{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;break-inside:avoid}
-.sign-card{border:.75px solid #cbd5e1;background:#f8fafc;padding:4px 6px;border-radius:2px;display:flex;flex-direction:column;justify-content:space-between;min-height:54px;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-.sign-card .r{font-weight:700;font-size:7.5px;color:#0a2540}.sign-card .n{font-size:7px;color:#64748b}
-.sign-card .f{display:flex;justify-content:space-between;align-items:flex-end;border-top:.5px dashed #cbd5e1;padding-top:2px;margin-top:3px;font-size:7px;gap:4px}
-#previewDlg{width:min(1100px,98vw);padding:14px;background:#526071}
-.pv-bar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;background:#fff;padding:8px 12px;margin-bottom:12px;border-radius:var(--radius-sm);border:1px solid var(--border-strong)}
-.pv-canvas{background:#fff;margin:0 auto;box-shadow:0 4px 18px rgba(0,0,0,.25);padding:14px 18px;overflow-x:auto}
+.pt .nodata td{color:#6b7280;font-style:italic;text-align:center;padding:.5em}
+.ps-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1em;break-inside:avoid}
+.sg{width:100%;border-collapse:collapse;text-align:center;font-size:.95em;break-inside:avoid}
+.sg th{background:#f3f4f6;font-weight:600;border:1px solid #d1d5db;padding:.3em .6em;width:33.33%}
+.sg td{border:1px solid #d1d5db;padding:.6em .8em;height:7.5em;vertical-align:bottom}
+.sg .lb{text-align:left;color:#9ca3af;font-style:italic;font-size:.95em;margin-bottom:1.6em}
+.sg .ok{color:#374151;font-weight:600;margin-bottom:.3em}
+.sg .nm{font-weight:700;font-size:1.1em;text-decoration:underline}
+.sg .ps{color:#6b7280;font-size:.95em;margin-top:.15em}
+.sg .dt{color:#9ca3af;font-size:.9em;margin-top:.15em}
+.ps-foot{display:flex;justify-content:space-between;border-top:1px solid #d1d5db;padding-top:.35em;margin-top:.9em;font-size:.9em;color:#6b7280}
+#previewDlg{width:min(1100px,98vw);padding:14px;background:#e5e7eb}
+.pv-bar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;background:#fff;padding:6px 12px;margin-bottom:12px;border-radius:2px;border:1px solid #d1d5db;box-shadow:0 1px 2px rgba(0,0,0,.05);font:400 12px 'Inter',sans-serif;color:#4b5563}
+.pv-bar b{color:#111827;font-weight:600}.pv-bar i{color:#d1d5db;font-style:normal;margin:0 8px}
+.pv-btn{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:2px;font:500 12px 'Inter',sans-serif;cursor:pointer;border:1px solid #d1d5db;background:#fff;color:#374151}
+.pv-btn.dk{background:#111827;border-color:#111827;color:#fff}
+.pv-btn .m{font-size:15px}
+.pv-canvas{background:#fff;margin:0 auto;border:1px solid #d1d5db;border-radius:2px;box-shadow:0 4px 6px -1px rgba(0,0,0,.1);padding:18px 22px;overflow-x:auto}
 .pv-canvas .print-sheet{zoom:1.35;min-width:760px}
 @page{size:A4 landscape;margin:6mm 8mm}
 @media print{
@@ -470,8 +505,8 @@ dialog::backdrop{background:rgba(10,37,64,.45)}
 
 <dialog id="previewDlg">
   <div class="pv-bar">
-    <div style="display:flex;align-items:center;gap:8px"><span class="m" style="color:var(--primary);font-size:20px">print</span><div><div style="font-weight:700;font-size:13px;color:var(--primary)">Pratinjau Cetak · A4 Landscape</div><div style="font-size:11px;color:var(--text-muted)">Tampilan diperbesar agar mudah dibaca; hasil cetak muat pada kertas A4.</div></div></div>
-    <div style="display:flex;gap:8px"><button class="btn btn-secondary btn-sm" onclick="$('#previewDlg').close()"><span class="m">close</span> Tutup</button><button class="btn btn-primary btn-sm" onclick="$('#previewDlg').close();window.print()"><span class="m">print</span> Cetak Sekarang</button></div>
+    <div><b>Pratinjau Dokumen</b><i>|</i>PT Merdeka Gold Resources Tbk<i>|</i><span style="color:#6b7280">Form Serah Terima Cuti (<span id="pvId"></span>) · A4 Landscape</span></div>
+    <div style="display:flex;gap:8px"><button class="pv-btn" onclick="$('#previewDlg').close()"><span class="m">close</span>Tutup</button><button class="pv-btn dk" onclick="$('#previewDlg').close();window.print()"><span class="m">print</span>Cetak / Simpan PDF</button></div>
   </div>
   <div class="pv-canvas" id="pvc"></div>
 </dialog>
@@ -785,13 +820,13 @@ function drawLinkGrid(){const g=$('#lg');if(!g)return;
 
 /* ============ LEAVE HANDOVER ============ */
 const SEC=[
- ['WORK','B. Work Handover (Penugasan &amp; Program Pelatihan yang Berjalan)',['Nama Program / Aktivitas','Status Saat Ini','Tenggat Waktu','Prioritas','PIC Pengganti','Tindakan yang Harus Dijalankan / Dokumen Terkait'],['title','status','deadline','priority','pic','detail']],
- ['CRITICAL','C. Critical Matters / Issues &amp; Risk Mitigation',['Isu Kritis / Potensi Risiko','Status Terkini','Langkah Tindak Lanjut Wajib Selama Cuti','Batas Waktu','Kontak Eskalasi','Keterangan Khusus'],['title','status','detail','deadline','pic','extra1']],
+ ['WORK','B. Pekerjaan / Program Pelatihan yang Berjalan',['Nama Program / Aktivitas','Status Saat Ini','Tenggat Waktu','Prioritas','PIC Pengganti','Tindakan yang Harus Dijalankan / Dokumen Terkait'],['title','status','deadline','priority','pic','detail']],
+ ['CRITICAL','C. Critical Matters / Catatan Kritis &amp; Risiko',['Isu Kritis / Potensi Risiko','Status Terkini','Langkah Tindak Lanjut Wajib Selama Cuti','Batas Waktu','Kontak Eskalasi','Keterangan Khusus'],['title','status','detail','deadline','pic','extra1']],
  ['MEETING','D. Pertemuan / Agenda Selama Cuti',['Tanggal','Agenda / Rapat','Tujuan','PIC / Peserta','Persiapan / Tindakan','Catatan'],['deadline','title','detail','pic','extra1','extra2']],
  ['DOC','E. Berkas &amp; Dokumen Operasional Kunci',['Nama Dokumen / Berkas','Lokasi / Link','Akses Diperlukan?','Pemilik / PIC','Tujuan','Catatan'],['title','detail','status','pic','extra1','extra2']]];
-const SIGN=[['employee','Karyawan Cuti (Handover Submitter)','Menyatakan telah menyerahkan seluruh rincian penugasan yang berjalan, dokumen operasional, mitigasi isu, dan kontak darurat kepada PIC pengganti secara akurat dan transparan.','employee_id'],
- ['backup','PIC Pengganti (Backup Delegate)','Menyatakan menerima pelimpahan tugas operasional di atas, memahami langkah tindak lanjut yang diperlukan, serta sanggup menjaga kelancaran pekerjaan selama periode cuti.','backup_id'],
- ['supervisor','Atasan Langsung (Direct Supervisor / Reviewer)','Menyetujui pendelegasian wewenang dan pembagian beban kerja pada form ini serta memastikan backup personil telah memahami kewajiban operasional.','supervisor_id']];
+const SIGN=[['employee','Karyawan Cuti (Penyerah Tugas)','Menyatakan telah menyerahkan seluruh rincian penugasan yang berjalan, dokumen operasional, mitigasi isu, dan kontak darurat kepada PIC pengganti secara akurat dan transparan.','employee_id'],
+ ['backup','PIC Pengganti (Penerima Tugas)','Menyatakan menerima pelimpahan tugas operasional di atas, memahami langkah tindak lanjut yang diperlukan, serta sanggup menjaga kelancaran pekerjaan selama periode cuti.','backup_id'],
+ ['supervisor','Atasan Langsung (Menyetujui)','Menyetujui pendelegasian wewenang dan pembagian beban kerja pada form ini serta memastikan backup personil telah memahami kewajiban operasional.','supervisor_id']];
 const SK=['sign_employee_at','sign_backup_at','sign_supervisor_at'];
 const PM={Tinggi:'High',Sedang:'Medium',Rendah:'Low'};
 const OPT={priority:['','High','Medium','Low'],status:['','Plan','In Progress','Finalisasi','Hold / Reschedule','Selesai']};
@@ -856,14 +891,14 @@ function formHTML(){
   <div class="tbl-scroll"><table class="table-form"><thead><tr><th class="c">No</th>${hd.map(z=>`<th>${z}</th>`).join('')}<th></th></tr></thead><tbody>${H.items.map((x,i)=>x.section!==k?'':`<tr class="${k==='WORK'&&x.status==='Selesai'?'done':''}"><td class="c">${++n}</td>${f.map(c=>`<td>${cell(x,i,c)}</td>`).join('')}<td><button class="icon-btn" title="Hapus baris" onclick="delI(${i})"><span class="m">close</span></button></td></tr>`).join('')}</tbody></table></div></div>`};
  return `<datalist id="tl">${own.map(t=>`<option value="${esc(t.title)}">`).join('')}</datalist>
  <div class="ho-bar"><span>Pilih pekerjaan dari daftar tugas karyawan yang cuti (status, tenggat, prioritas terisi otomatis), atau pilih “Ketik sendiri”. Baris kosong tidak disimpan.</span><span style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-secondary btn-sm" onclick="importTasks()"><span class="m">download</span>Impor Tugas Harian</button><button class="btn btn-secondary btn-sm" onclick="previewHO()"><span class="m">visibility</span>Pratinjau</button><button class="btn btn-secondary btn-sm" onclick="printHO()"><span class="m">print</span>Cetak</button><button class="btn btn-primary btn-sm" onclick="saveHO()"><span class="m">check</span>Simpan</button></span></div>
- <div class="doc-section-card"><div class="doc-section-header"><span class="doc-section-title">A. Informasi Karyawan &amp; Periode Delegasi Cuti</span>${h.handover_id?`<span class="mono" style="color:var(--text-muted)">${esc(h.handover_id)}</span>`:''}</div>
+ <div class="ho-sheet">${hdrHTML(h)}<div class="doc-section-card"><div class="doc-section-header"><span class="doc-section-title">A. Informasi Karyawan &amp; Periode Cuti</span></div>
  <table class="table-form kv"><tr><th>Nama Karyawan</th><td><b>${esc(usr(h.employee_id).full_name||'-')}</b></td><th>Jabatan / Role</th><td>${esc(h.position)}</td></tr>
  <tr><th>Seksi / Divisi</th><td><input value="${esc(h.section)}" oninput="H.h.section=this.value"></td><th>Atasan Langsung</th><td>${sel('supervisor_id')}</td></tr>
  <tr><th>Tanggal Mulai Cuti</th><td>${dpk('start_date')}</td><th>Tanggal Selesai Cuti</th><td>${dpk('end_date')} <span id="dys" class="mono" style="color:var(--text-muted)">${leaveDays(h)}</span></td></tr>
  <tr><th>PIC Pengganti (Backup)</th><td>${sel('backup_id')}</td><th>Tanggal Serah Terima</th><td>${dpk('handover_date')}</td></tr></table></div>
  ${SEC.map(sec).join('')}
- <div class="doc-section-card"><div class="doc-section-header"><span class="doc-section-title">F. Konfirmasi Serah Terima &amp; Validasi Tandatangan (Sign-Off Protocol)</span></div><div class="tbl-scroll"><table class="table-form">${SIGN.map(([k,l,tx,uk])=>{const at=h['sign_'+k+'_at'],w=h[uk];
-  return `<tr><th style="width:24%">${l}<div style="font-weight:400;color:var(--text-muted)">${esc(usr(w).full_name||'-')}</div></th><td style="font-size:11px;color:#334155;line-height:1.3">${tx}</td><td style="white-space:nowrap;width:190px">${at?`<span class="ho-badge ho-signed"><span class="m" style="font-size:13px">check_circle</span> ${esc(at)}</span>`:!h.handover_id?'<span class="mono" style="color:var(--text-tertiary)">Simpan dulu</span>':ME===w?`<button class="btn btn-primary btn-sm" data-a="sign" data-id="${esc(h.handover_id)}|${k}"><span class="m">ink_pen</span>Konfirmasi</button>`:`<span class="mono" style="color:var(--text-tertiary)">Menunggu ${esc(nm(w))}</span>`}</td></tr>`}).join('')}</table></div></div>`}
+ <div class="doc-section-card"><div class="doc-section-header"><span class="doc-section-title">F. Pengesahan Serah Terima Tugas (Sign-off Protocol)</span></div><div class="tbl-scroll"><table class="table-form">${SIGN.map(([k,l,tx,uk])=>{const at=h['sign_'+k+'_at'],w=h[uk];
+  return `<tr><th style="width:24%">${l}<div style="font-weight:400;color:var(--text-muted)">${esc(usr(w).full_name||'-')}</div></th><td style="font-size:11px;color:#334155;line-height:1.3">${tx}</td><td style="white-space:nowrap;width:190px">${at?`<span class="ho-badge ho-signed"><span class="m" style="font-size:13px">check_circle</span> ${esc(at)}</span>`:!h.handover_id?'<span class="mono" style="color:var(--text-tertiary)">Simpan dulu</span>':ME===w?`<button class="btn btn-primary btn-sm" data-a="sign" data-id="${esc(h.handover_id)}|${k}"><span class="m">ink_pen</span>Konfirmasi</button>`:`<span class="mono" style="color:var(--text-tertiary)">Menunggu ${esc(nm(w))}</span>`}</td></tr>`}).join('')}</table></div></div></div>`}
 function saveHO(){const h=H.h,er=[],its=H.items.filter(x=>!isEmpty(x));its.forEach(x=>{if(x.pic==='-')x.pic=''});
  if(!h.start_date||!h.end_date)er.push('tanggal mulai & akhir cuti');if(!h.backup_id)er.push('PIC / Backup');if(!its.some(x=>x.section==='WORK'))er.push('minimal 1 pekerjaan di bagian B');
  if(er.length){alert('Lengkapi dulu: '+er.join(', ')+'.');return}run('saveHandover',{...h},its)}
@@ -873,30 +908,35 @@ function importTasks(){const em=H.h.employee_id,ts=D.tasks.filter(t=>t.pic_id===
  toast(ts.length?ts.length+' tugas ditambahkan.':'Semua tugas aktif sudah masuk.');draw()}
 function delHO(id){if(confirm('Hapus handover '+id+'?'))run('removeHandover',id)}
 
-/* ---- Cetak A4 (muat 1 lembar landscape) ---- */
+/* ---- Cetak A4 (muat 1 lembar landscape) — gaya formulir korporat ---- */
+function hdrHTML(h){const e=esc,n=nsig(h),st=!h.handover_id?'Draft (Belum Disimpan)':n===3?'Lengkap (Terverifikasi 3/3)':'Menunggu Konfirmasi ('+n+'/3)';
+ return `<div class="dh"><div class="dh-l"><div class="dh-logo"><img src="assets/logo-mgr-mark.png" alt=""></div><div><div class="dh-co">PT MERDEKA GOLD RESOURCES TBK</div><div class="dh-t">FORMULIR SERAH TERIMA TUGAS CUTI (LEAVE HANDOVER PROTOCOL)</div><div class="dh-s">Human Capital Management • Divisi Learning &amp; Development</div></div></div>
+ <table class="dh-m"><tr><td>No. Dokumen</td><td>${e(h.handover_id||'DRAFT')}</td></tr><tr><td>Tanggal Serah Terima</td><td>${e(pd(h.handover_date))}</td></tr><tr><td>Status</td><td>${e(st)}</td></tr></table></div>`}
 function printHTML(o){
  const h=o.h,its=o.items.filter(x=>!isEmpty(x)),by=k=>its.filter(x=>x.section===k),U=id=>esc(usr(id).full_name||id||'-'),e=esc;
- const pb=p=>`<span class="pt-badge ${p==='High'?'pt-high':p==='Low'?'pt-low':'pt-med'}">${e(p||'Medium')}</span>`;
- const none=n=>`<tr><td colspan="${n}" class="c" style="color:#64748b">— Tidak ada data —</td></tr>`;
+ const pr=p=>p==='High'?'<b>High</b>':e(p||'Medium');
+ const dl=v=>{const t=pd(v);return t&&t!=='-'?e(t):'<span style="color:#9ca3af">—</span>'};
+ const none=(n,t)=>`<tr class="nodata"><td colspan="${n}">${t||'Tidak ada data.'}</td></tr>`;
  const W=by('WORK'),C=by('CRITICAL'),M=by('MEETING'),DC=by('DOC');
- const sg=SIGN.map(([k,l,tx,uk])=>{const at=h['sign_'+k+'_at'];return `<div class="sign-card"><div><div class="r">${l}</div><div class="n">${U(h[uk])}</div></div><div class="f">${at?`<b style="color:#047857">✓ TERVERIFIKASI DIGITAL</b><span class="mono" style="font-size:6.5px;color:#64748b">${e(at)}</span>`:`<b style="color:#b45309">MENUNGGU VERIFIKASI</b><span class="mono" style="font-size:6.5px;color:#64748b">[ ____________ ]</span>`}</div></div>`}).join('');
- return `<div class="print-sheet">
- <div class="ps-header"><div class="ps-brand"><img class="ps-logo-img" src="assets/logo-mgr-long.png" alt="Merdeka Gold Resources"><div><h2 class="ps-title">LEAVE HANDOVER PROTOCOL (FORM SERAH TERIMA TUGAS CUTI)</h2><p class="ps-sub">Human Capital Management • Learning &amp; Development Section — Merdeka Gold Resources</p></div></div>
- <div class="ps-meta"><div>ID: <b style="font-size:9.5px;color:#0a2540">${e(h.handover_id||'DRAFT')}</b></div><div style="font-size:7.5px;color:#64748b">Tgl Serah Terima: ${e(pd(h.handover_date))}</div></div></div>
- <div class="ps-sec-head">A. Informasi Karyawan &amp; Periode Delegasi Cuti</div>
- <table class="pt"><tr><th style="width:13%">Nama Karyawan</th><td style="width:37%"><b>${U(h.employee_id)}</b></td><th style="width:13%">Jabatan / Seksi</th><td style="width:37%">${e(h.position)}${h.section?' — '+e(h.section):''}</td></tr>
- <tr><th>Periode Cuti</th><td><b>${e(pd(h.start_date))}</b> s/d <b>${e(pd(h.end_date))}</b> ${leaveDays(h)?'('+leaveDays(h)+')':''}</td><th>Atasan Langsung</th><td>${U(h.supervisor_id)}</td></tr>
- <tr><th>PIC Pengganti</th><td><b>${U(h.backup_id)}</b></td><th>Tanggal Serah Terima</th><td>${e(pd(h.handover_date))}</td></tr></table>
- <div class="ps-sec-head">${SEC[0][1]}</div>
- <table class="pt"><thead><tr><th class="c" style="width:20px">No</th><th style="width:21%">Nama Program / Aktivitas</th><th>Status</th><th>Tenggat</th><th>Prioritas</th><th>PIC Pengganti</th><th>Tindakan yang Harus Dijalankan / Dokumen Terkait</th></tr></thead><tbody>${W.map((x,i)=>`<tr><td class="c"><b>${i+1}</b></td><td><b>${e(x.title)}</b></td><td>${e(x.status)}</td><td class="mono">${e(pd(x.deadline))}</td><td>${pb(x.priority)}</td><td>${e(x.pic)}</td><td>${e(x.detail)}</td></tr>`).join('')||none(7)}</tbody></table>
- <div class="ps-sec-head">${SEC[1][1]}</div>
- <table class="pt"><thead><tr><th class="c" style="width:20px">No</th><th style="width:21%">Isu Kritis / Potensi Risiko</th><th>Status</th><th>Langkah Tindak Lanjut Wajib Selama Cuti</th><th>Batas Waktu</th><th>Kontak Eskalasi</th><th>Keterangan</th></tr></thead><tbody>${C.map((x,i)=>`<tr><td class="c"><b>${i+1}</b></td><td><b>${e(x.title)}</b></td><td>${e(x.status)}</td><td>${e(x.detail)}</td><td class="mono">${e(pd(x.deadline))}</td><td>${e(x.pic)}</td><td>${e(x.extra1)}</td></tr>`).join('')||none(7)}</tbody></table>
- <div class="ps-grid-2"><div><div class="ps-sec-head">${SEC[2][1]}</div><table class="pt"><thead><tr><th>Tanggal</th><th>Agenda / Tujuan</th><th>PIC / Peserta</th><th>Persiapan / Catatan</th></tr></thead><tbody>${M.map(x=>`<tr><td class="mono">${e(pd(x.deadline))}</td><td><b>${e(x.title)}</b>${x.detail?': '+e(x.detail):''}</td><td>${e(x.pic)}</td><td>${e([x.extra1,x.extra2].filter(Boolean).join(' • '))}</td></tr>`).join('')||none(4)}</tbody></table></div>
- <div><div class="ps-sec-head">${SEC[3][1]}</div><table class="pt"><thead><tr><th>Nama Berkas</th><th>Lokasi / Link</th><th>Akses</th><th>Pemilik / Tujuan</th></tr></thead><tbody>${DC.map(x=>`<tr><td><b>${e(x.title)}</b></td><td class="mono" style="font-size:7px">${e(x.detail)}</td><td>${e(x.status)}</td><td>${e([x.pic,x.extra1,x.extra2].filter(Boolean).join(' • '))}</td></tr>`).join('')||none(4)}</tbody></table></div></div>
- <div class="ps-sec-head">F. Konfirmasi Serah Terima &amp; Validasi Tandatangan (Sign-Off Protocol)</div><div class="ps-sign">${sg}</div></div>`}
+ const sg=SIGN.map(([k,l,tx,uk])=>{const at=h['sign_'+k+'_at'],pos=k==='employee'?(h.position||usr(h.employee_id).position||''):(usr(h[uk]).position||'');
+  return `<td><div class="lb">Tanda tangan / Paraf:</div>${at?'<div class="ok">✓ Terverifikasi digital</div>':''}<div class="nm">${U(h[uk])}</div><div class="ps">${e(pos)}</div><div class="dt">Tgl: ${at?e(at):'........................................'}</div></td>`}).join('');
+ return `<div class="print-sheet">${hdrHTML(h)}
+ <div class="ps-sec-head"><span>A. Informasi Karyawan &amp; Periode Cuti</span></div>
+ <table class="pt"><tr><th class="k" style="width:15%">Nama Karyawan</th><td style="width:35%"><b>${U(h.employee_id)}</b></td><th class="k" style="width:15%">Jabatan / Seksi</th><td style="width:35%">${e(h.position)}${h.section?' — '+e(h.section):''}</td></tr>
+ <tr><th class="k">Periode Cuti</th><td><b>${e(pd(h.start_date))} s/d ${e(pd(h.end_date))}</b>${leaveDays(h)?' <span style="color:#6b7280">('+leaveDays(h)+')</span>':''}</td><th class="k">Atasan Langsung</th><td><b>${U(h.supervisor_id)}</b></td></tr>
+ <tr><th class="k">PIC Pengganti (Backup)</th><td><b>${U(h.backup_id)}</b></td><th class="k">Tanggal Efektif</th><td>${e(pd(h.start_date))}</td></tr></table>
+ <div class="ps-sec-head"><span>${SEC[0][1]}</span><small>Total: ${W.length} Program</small></div>
+ <table class="pt z"><thead><tr><th class="c" style="width:24px">No</th><th style="width:22%">Nama Program / Aktivitas</th><th class="c" style="width:8%">Status</th><th class="c" style="width:9%">Tenggat</th><th class="c" style="width:7%">Prioritas</th><th style="width:10%">PIC Pengganti</th><th>Tindakan yang Dijalankan / Dokumen Terkait</th></tr></thead><tbody>${W.map((x,i)=>`<tr><td class="c">${i+1}</td><td><b>${e(x.title)}</b></td><td class="c">${e(x.status)}</td><td class="c">${dl(x.deadline)}</td><td class="c">${pr(x.priority)}</td><td><b style="font-weight:500">${e(x.pic)}</b></td><td>${e(x.detail)}</td></tr>`).join('')||none(7)}</tbody></table>
+ <div class="ps-sec-head"><span>${SEC[1][1]}</span></div>
+ <table class="pt z"><thead><tr><th class="c" style="width:24px">No</th><th style="width:22%">Isu Kritis / Potensi Masalah</th><th class="c" style="width:8%">Status</th><th>Langkah Tindak Lanjut Wajib Selama Cuti</th><th class="c" style="width:9%">Batas Waktu</th><th style="width:14%">Kontak Eskalasi</th></tr></thead><tbody>${C.map((x,i)=>`<tr><td class="c">${i+1}</td><td><b>${e(x.title)}</b></td><td class="c">${e(x.status)}</td><td>${e(x.detail)}${x.extra1?'<br><span style="color:#6b7280">Ket: '+e(x.extra1)+'</span>':''}</td><td class="c">${dl(x.deadline)}</td><td>${e(x.pic)}</td></tr>`).join('')||none(6,'Tidak ada isu kritis terbuka saat ini.')}</tbody></table>
+ <div class="ps-grid-2"><div><div class="ps-sec-head"><span>${SEC[2][1]}</span></div><table class="pt z"><thead><tr><th class="c" style="width:16%">Tanggal</th><th>Agenda / Acara</th><th style="width:20%">PIC Pengganti</th><th style="width:22%">Catatan / Bahan</th></tr></thead><tbody>${M.map(x=>`<tr><td class="c">${dl(x.deadline)}</td><td><b>${e(x.title)}</b>${x.detail?'<br><span style="color:#6b7280">'+e(x.detail)+'</span>':''}</td><td>${e(x.pic)}</td><td>${e([x.extra1,x.extra2].filter(Boolean).join(' • '))}</td></tr>`).join('')||none(4)}</tbody></table></div>
+ <div><div class="ps-sec-head"><span>${SEC[3][1]}</span></div><table class="pt z"><thead><tr><th>Nama Berkas / Folder</th><th>Lokasi / Penyimpanan</th><th class="c" style="width:16%">Hak Akses</th><th style="width:22%">Pemilik / Tujuan</th></tr></thead><tbody>${DC.map(x=>`<tr><td><b>${e(x.title)}</b></td><td>${e(x.detail)}</td><td class="c">${e(x.status)}</td><td>${e([x.pic,x.extra1,x.extra2].filter(Boolean).join(' • '))}</td></tr>`).join('')||none(4)}</tbody></table></div></div>
+ <div class="ps-sec-head"><span>F. Pengesahan Serah Terima Tugas (Sign-off Protocol)</span></div>
+ <table class="sg"><thead><tr>${SIGN.map(x=>`<th>${x[1]}</th>`).join('')}</tr></thead><tbody><tr>${sg}</tr></tbody></table>
+ <div class="ps-foot"><div>Formulir Serah Terima Tugas Cuti — PT Merdeka Gold Resources Tbk</div><div>Dokumen No: ${e(h.handover_id||'DRAFT')}</div></div></div>`}
 function printSrc(id){return id?(D.hos.some(x=>x.handover_id===id)?cloneHO(id):null):H}
 function printHO(id){const o=printSrc(id);if(!o){toast('Tidak ada handover untuk dicetak.');return}$('#print').innerHTML=printHTML(o);setTimeout(()=>window.print(),120)}
-function previewHO(id){const o=printSrc(id);if(!o){toast('Tidak ada handover untuk dipratinjau.');return}const html=printHTML(o);$('#pvc').innerHTML=html;$('#print').innerHTML=html;$('#previewDlg').showModal()}
+function previewHO(id){const o=printSrc(id);if(!o){toast('Tidak ada handover untuk dipratinjau.');return}const html=printHTML(o);$('#pvId').textContent=o.h.handover_id||'DRAFT';$('#pvc').innerHTML=html;$('#print').innerHTML=html;$('#previewDlg').showModal()}
 
 /* ============ AKUN ============ */
 function askWho(){$('#meSel').innerHTML=D.users.map(u=>`<option value="${esc(u.user_id)}" ${u.user_id===ME?'selected':''}>${esc(u.full_name)} — ${esc(u.position)}</option>`).join('');if(D.users.length&&!$('#meDlg').open)$('#meDlg').showModal()}
